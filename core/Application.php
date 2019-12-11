@@ -1,6 +1,9 @@
 <?php
 
+namespace core;
+
 use controllers\SiteController;
+use core\Request;
 
 /**
  * Base class for web app
@@ -8,16 +11,27 @@ use controllers\SiteController;
  * @author artyomnar
  */
 class Application {
+    
+    private $request;
+    
+    public function __construct() {
+        $this->request = new Request();
+    }
+    
     /**
      * Routes request to controller
      */
     public function route()
     {
-        //define required controller and action
-        //should dinamically create required controller and call action method inside this one
-        //Also should create several main objects: request, response classes
-        $controller = new SiteController();
-        $response = $controller->actionIndex();
+        $this->request->parseRequestUri();
+        $params = $this->request->parseGetParams();//I think this shit is useless
+        
+        $controller = $this->request->getContoller();
+        $this->request->callAction($controller);
+        
+        //ToDo: create response class with inner logic
+        $response = $controller->actionIndex($params);
+        
         $this->render($response);
     }
     
