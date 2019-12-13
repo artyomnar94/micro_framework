@@ -10,42 +10,24 @@ use core\Request;
  *
  * @author artyomnar
  */
-class Application {
-    
+class Application {    
     private $request;
+    private $response;
     
     public function __construct() {
         $this->request = new Request();
+        $this->response = new Response();
     }
     
     /**
-     * Routes request to controller
+     * Routes request to controller action then returns response
      */
-    public function route()
-    {
+    public function run()
+    {        
         $this->request->parseRequestUri();
-        $params = $this->request->parseGetParams();//I think this shit is useless
-        
+        //$params = $this->request->parseGetParams();//I think this shit is useless        
         $controller = $this->request->getContoller();
-        $this->request->callAction($controller);
-        
-        //ToDo: create response class with inner logic
-        $response = $controller->actionIndex($params);
-        
-        $this->render($response);
+        $this->request->callAction($controller);        
     }
     
-    /**
-     * Prints response view of action
-     * @param array $response
-     */
-    public function render(array $response)
-    {
-        //[$view, $params] = $response;
-        
-        $view = $response['view'];
-        $viewPath = "views/{$view}.php";
-        //ToDo: provide params from response into view
-        echo file_get_contents($viewPath);
-    }
 }

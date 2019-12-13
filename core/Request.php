@@ -3,7 +3,7 @@
 namespace core;
 
 /**
- * Description of Request
+ * class Request contains methods to parse input uri and get params
  *
  * @author artyomnar
  */
@@ -17,13 +17,14 @@ class Request {
      */            
     public function parseRequestUri()
     {
-        $rawUri = substr($_SERVER['REQUEST_URI'], 1);
+        $uri = substr($_SERVER['REQUEST_URI'], 1);
         $queryString = $_SERVER['QUERY_STRING'];
-        $uri = str_replace('?', '', strstr($rawUri, $queryString, true));
-        
+        if ($queryString) {
+            $uri = str_replace('?', '', strstr($uri, $queryString, true));            
+        }   
         $routeParams = explode('/', $uri);
         $this->controller = $routeParams[0];
-        $this->action = $routeParams[1]?? 'index';        
+        $this->action = $routeParams[1]? $routeParams[1] : 'index';
     }
     
     /**
@@ -33,34 +34,49 @@ class Request {
     public function parseGetParams(): array
     {
         $queryString = $_SERVER['QUERY_STRING'];
-        $rawParams = explode('&', $queryString);
-        $getParams = [];
-        foreach ($rawParams as $param) {
-            $key = strstr('=', $param, true);
-            $value = substr(strstr('=', $param), 1);
-            $getParams[$key] = $value;
+        if ($queryString) {
+            $rawParams = explode('&', $queryString);
+            $getParams = [];
+            foreach ($rawParams as $param) {
+                $key = strstr('=', $param, true);
+                $value = substr(strstr('=', $param), 1);
+                $getParams[$key] = $value;
+            }        
+            $this->getParams = $getParams;
         }
-        
-        $this->getParams = $getParams;
-        return $getParams;
+       
+        return $this->getParams;
     }
     
     public function getContoller(): \ReflectionClass
     {
         $contollerClassName = '\controllers\\' . ucfirst($this->controller) . 'Controller';
-        $contollerReflection = new \ReflectionClass($contollerClassName);
-        
-        //$actionMethod = 'action' . ucfirst($this->action);
-        //$object->getMethod($actionMethod)->invoke($object->newInstance());        
-        //return $object->newInstance();
-        
+        try {
+            $contollerReflection = new \ReflectionClass($contollerClassName);
+        } catch (\Throwable $ex) {
+            Response::getErrorCode(404, 'Page not found'); //Uncatching 404 exception!!! Throwable flag is ignored!
+        }
         return $contollerReflection;
     }
     
     public function callAction(\ReflectionClass $contoller)
     {
         $actionMethod = 'action' . ucfirst($this->action);
-        $contoller->getMethod($actionMethod)->invoke($contoller->newInstance());
+        try {
+            $contoller->getMethod($actionMethod)->invoke($contoller->newInstance($this->controller));
+        } catch (\ReflectionException $exception) {          
+            Response::getErrorCode(404, 'Page not found');
+        }
+    }
+    
+    /**
+     * Returns contoller name how specify in URL
+     * @return string
+     */
+    public function getControllerName(): string
+    {
+        $controllerName = strtolower($this->controller);
+        return $controllerName;
     }
     
     /**
@@ -70,5 +86,15 @@ class Request {
     public function getParams(): array
     {
         return $this->getParams;
+    }
+    
+    /**
+     * Redirects current request to provided url
+     * @param string $url
+     */
+    public function redirect(string $url)
+    {
+        header("location: $url");
+        exit;
     }
 }

@@ -2,20 +2,19 @@
 
 namespace controllers;
 
+use core\BaseController;
 /**
  * Description of SiteController
  *
  * @author artyomnar
  */
-class SiteController {
+class SiteController extends BaseController {
     
-    public function actionIndex()//: array
-    {
-        var_dump(123); die;
-        $task = new \models\Task();
-        $response = ['view' => 'main', 'params' => ['task' => $task]];
-        
-        return $response;
+    public function actionIndex()
+    {      
+        $task = new \models\Task('Bob', 'asd@sd.sd', 'to do list', 1);        
+                
+        $this->view->render('index', ['task' => $task]);
     }
           
 }
