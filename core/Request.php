@@ -54,7 +54,7 @@ class Request {
         try {
             $contollerReflection = new \ReflectionClass($contollerClassName);
         } catch (\Throwable $ex) {
-            Response::getErrorCode(404, 'Page not found'); //Uncatching 404 exception!!! Throwable flag is ignored!
+            Response::getErrorPage(404, 'Page not found'); //Uncatching 404 exception!!! Throwable flag is ignored!
         }
         return $contollerReflection;
     }
@@ -65,7 +65,7 @@ class Request {
         try {
             $contoller->getMethod($actionMethod)->invoke($contoller->newInstance($this->controller));
         } catch (\ReflectionException $exception) {          
-            Response::getErrorCode(404, 'Page not found');
+            Response::getErrorPage(404, 'Page not found');//Unavailable to provide custom error view, cause calling function inside core dir
         }
     }
     

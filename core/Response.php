@@ -13,11 +13,14 @@ class Response {
     /**
      * Renders error view
      * @param int $code
+     * @param string $message
+     * @param string $pathToView
      */
-    public static function getErrorCode(int $code, string $message = '')
+    public static function getErrorPage(int $code, string $message = '', string $pathToView = '')
     {
         http_response_code($code);
-        require 'views/http_error.php';
+        $pathToViev = empty($pathToView)? 'views/http_error.php' : $pathToView;
+        require $pathToViev;
         exit;
     }
     

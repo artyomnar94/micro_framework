@@ -2,16 +2,25 @@
 
 namespace models;
 
+use core\BaseModel;
+
 /**
  * Task entity
  *
  * @author artyomnar
  */
-class Task {
+class Task extends BaseModel{
     public $userName;
     public $email;
     public $text;
     public $status;
+    
+    public function rules() : array
+    {
+        return [
+            ['userName', ['\core\validators\RequireValidator']]
+        ];
+    }
     
     public function getTaskInfo(): array
     {

@@ -36,4 +36,29 @@ class View {
         $content = ob_get_clean();
         require $this->layoutPath;
     }
+    
+    //ToDo Realize it
+    public function renderPartial() {
+        
+    }
+    
+    public static function renderForm(
+            \core\BaseModel $model, 
+            string $action, 
+            string $method = 'POST', 
+            array $attributeList = []
+            )
+    {
+        $modelName = $model->getModelName();
+        echo "<form method=\"$method\" action=\"$action\">";
+        //$attributeList = empty($attributeList)? $model-> //ToDo: realize getting all model attributes by default or provided
+        foreach ($attributeList as $item) {
+            echo "<label>$item</label>";
+            //echo "<input type=\"text\" name=\"$modelName'['$item']'\">";
+            echo "<input type=\"text\" name=\"$modelName";
+            echo "[$item]\">";
+        }
+        echo "<input type=\"submit\">";
+        echo "</form>";        
+    }
 }
