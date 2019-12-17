@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace core\views;
 
 /**
  * Description of View
@@ -37,13 +37,32 @@ class View {
         require $this->layoutPath;
     }
     
-    //ToDo Realize it
-    public function renderPartial() {
-        
+    /**
+     * Renders view without layout
+     * 
+     * @param string $view
+     * @param array $params
+     * @param string $title
+     */
+    public function renderPartial(string $view, array $params = [], string $title = '') {
+        $this->view = $view;
+        $this->viewPath = "views/{$this->controllerId}/{$this->view}.php";
+       
+        $title = empty($title)? ("{$this->controllerId}/{$this->view}") : $title;
+        extract($params);        
+        require $this->viewPath;
     }
     
+    /**
+     * Renders form to set model property
+     * 
+     * @param \core\BaseModel $model
+     * @param string $action
+     * @param string $method
+     * @param array $attributeList
+     */
     public static function renderForm(
-            \core\BaseModel $model, 
+            \core\models\BaseModel $model, 
             string $action, 
             string $method = 'POST', 
             array $attributeList = []

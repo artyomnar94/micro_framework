@@ -1,11 +1,13 @@
-<!Doctype = "html">
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>The main page</title>
-    </head>    
-    <body>
-        <h1>The main page</h1>
-        <?=  123; ?>
-    </body>
-</html>
+<?php 
+    /**
+     * @var models/Task $task
+     */
+
+     use core\views\View;
+?>
+<h3>Fill the Form</h3>
+<?php View::renderForm($task, 'index', 'POST', ['userName', 'email', 'text']) ?>
+<p>Is Valid: <?=$isValid?></p>
+<!--<pre>
+<?php //print_r($task->getTaskInfo()); ?>
+</pre>-->

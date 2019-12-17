@@ -2,7 +2,7 @@
 
 namespace controllers;
 
-use core\BaseController;
+use core\controllers\BaseController;
 use models\Task;
 /**
  * Description of SiteController

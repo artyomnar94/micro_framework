@@ -12,10 +12,10 @@ abstract class BaseValidator {
     
     /**
      * Validates provided attribute whith rule parameters
-     * @param \core\BaseModel $model
+     * @param \core\models\BaseModel $model
      * @param string|array $attributeList
      * @param array $params
      * @return bool
      */
-    public abstract function isValid(\core\BaseModel $model, $attributeList, array $params = []): bool;    
+    public abstract function isValid(\core\models\BaseModel $model, $attributeList, array $params = []): bool;    
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace core\controllers;
 
 /**
  * Description of BaseController
@@ -17,7 +17,7 @@ class BaseController {
      */
     public function __construct(string $id) {
         $this->id = $id;
-        $this->view = new View();
+        $this->view = new \core\views\View();
         $this->view->controllerId = $id;
     }
 }

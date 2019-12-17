@@ -2,7 +2,7 @@
 
 namespace models;
 
-use core\BaseModel;
+use core\models\BaseModel;
 
 /**
  * Task entity
@@ -18,7 +18,7 @@ class Task extends BaseModel{
     public function rules() : array
     {
         return [
-            ['userName', ['\core\validators\RequireValidator']]
+            [['userName', 'email'], ['\core\validators\RequireValidator']]
         ];
     }
     
