@@ -24,18 +24,19 @@ class BaseModel {
     }
     
     /**
-     * Set rules to validate model attributes
+     * Set rules to validate model attributes.
+     * There is an convention:
+     * [
+     *      [attributeList], //string or array of strings
+     *      validatorName, //string with namespacing if custom validator used else without
+     *      [param1 => val1, ...] //array where provided param name as a key with value to configure validator 
+     * ]
+     * 
      * @return array
      */
     public function rules(): array
     {
-        return [];
-        /*
-         * [
-         *      [attributeList],
-         *      [validatorName, param1 => val1, ...]
-         * ]
-         */
+        return [];        
     }
     
     /**
@@ -61,9 +62,10 @@ class BaseModel {
         $rules = $this->rules();
         $isValidModel = true;
         foreach ($rules as $rule) {
-            $attributeList = $rule[0];//str or arr
-            $params = $rule[1];
-            $validatorName = ucfirst($params[0]);//if provided custom validator then namespace required else use standard           
+            $attributeList = $rule[0];
+            $isCustomValidator = strpos($rule[1], "\\");
+            $validatorName = ($isCustomValidator === false)? ("\core\\validators\\" . ucfirst($rule[1]) . "Validator") : $rule[1];
+            $params = $rule[2]?? [];
             
             /**
              * @param \core\validators\BaseValidator $validator

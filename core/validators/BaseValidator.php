@@ -17,5 +17,9 @@ abstract class BaseValidator {
      * @param array $params
      * @return bool
      */
-    public abstract function isValid(\core\models\BaseModel $model, $attributeList, array $params = []): bool;    
+    public abstract function isValid(
+            \core\models\BaseModel $model, 
+            $attributeList,
+            array $params = []
+            ): bool;    
 }

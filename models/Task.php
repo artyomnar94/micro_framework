@@ -9,16 +9,16 @@ use core\models\BaseModel;
  *
  * @author artyomnar
  */
-class Task extends BaseModel{
+class Task extends BaseModel {
     public $userName;
     public $email;
     public $text;
     public $status;
-    
+        
     public function rules() : array
     {
         return [
-            [['userName', 'email'], ['\core\validators\RequireValidator']]
+            [['userName', 'email'], 'require']
         ];
     }
     
