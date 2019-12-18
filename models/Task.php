@@ -18,7 +18,8 @@ class Task extends BaseModel {
     public function rules() : array
     {
         return [
-            [['userName', 'email'], 'require']
+            [['userName', 'email'], 'require'],
+            ['userName', 'string', ['min' => 3, 'max' => 5]]
         ];
     }
     

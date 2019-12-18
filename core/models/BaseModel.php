@@ -9,6 +9,12 @@ namespace core\models;
  */
 class BaseModel {
     private $modelName;
+    
+    /**
+     * Stores errors after attribute validation in format 'attr' => 'error msg'
+     * @var array $errorMessages
+     */
+    public $errorMessages = [];
 
     public function __construct() {
         $modelPathItems = explode('\\', __CLASS__);
@@ -21,8 +27,8 @@ class BaseModel {
     public function getModelName(): string
     {
         return $this->modelName;
-    }
-    
+    }        
+
     /**
      * Set rules to validate model attributes.
      * There is an convention:
@@ -60,9 +66,12 @@ class BaseModel {
     public function validate(): bool
     {
         $rules = $this->rules();
-        $isValidModel = true;
+        $validationResults = [];
         foreach ($rules as $rule) {
             $attributeList = $rule[0];
+            if (!is_array($attributeList)) {
+                $attributeList = [$attributeList];
+            }
             $isCustomValidator = strpos($rule[1], "\\");
             $validatorName = ($isCustomValidator === false)? ("\core\\validators\\" . ucfirst($rule[1]) . "Validator") : $rule[1];
             $params = $rule[2]?? [];
@@ -71,12 +80,10 @@ class BaseModel {
              * @param \core\validators\BaseValidator $validator
              */
             $validator = new $validatorName();            
-            $isValidModel = $validator->isValid($this, $attributeList, $params);
-            if (!$isValidModel) {
-                return false;
-            }
+            $validationResults[$validatorName] = $validator->validate($this, $attributeList, $params);
         }
-        return true;
+        
+        return in_array(false, $validationResults)? false : true;
     }
     
     /**public function getAttributeList(array $attributes = []): array

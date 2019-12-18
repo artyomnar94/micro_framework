@@ -7,26 +7,23 @@ namespace core\validators;
  *
  * @author artyomnar
  */
-class RequireValidator extends BaseValidator {
+class RequireValidator extends BaseValidator
+{
     /**
      * Checks does provided attributes empty in current model
      * @param \core\models\BaseModel $model
-     * @param string | array attributeList
+     * @param array attributeList
      * @param array $params
      * @return boolean
      */
-    public function isValid(\core\models\BaseModel $model, $attributeList, array $params = []): bool
-    {        
-        if (is_string($attributeList)) {
-            return empty($model->$attributeList)? false : true;
-        } elseif (is_array($attributeList)) {
-            foreach ($attributeList as $attribute) {                
-                if (empty($model->$attribute)) {
-                    return false;
-                }
+    public function validate (\core\models\BaseModel $model, array $attributeList, array $params = []): bool
+    {                
+        foreach ($attributeList as $attribute) {
+            if (empty($model->$attribute)) {
+                $this->isValid = false;
+                $model->errorMessages[$attribute] = "$attribute can't by empty";
             }
-            return true;
         }
-        return false;
+        return $this->isValid;
     }
 }

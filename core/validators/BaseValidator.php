@@ -9,17 +9,18 @@ namespace core\validators;
  */
 abstract class BaseValidator {
     public $attribte;
+    public $isValid = true;
     
     /**
      * Validates provided attribute whith rule parameters
      * @param \core\models\BaseModel $model
-     * @param string|array $attributeList
+     * @param array $attributeList
      * @param array $params
      * @return bool
      */
-    public abstract function isValid(
+    public abstract function validate (
             \core\models\BaseModel $model, 
-            $attributeList,
+            array $attributeList,
             array $params = []
-            ): bool;    
+            ): bool;
 }
