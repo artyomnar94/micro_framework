@@ -7,7 +7,8 @@ namespace core\controllers;
  *
  * @author artyomnar
  */
-class BaseController {
+class BaseController
+{
     public $id;
     public $view;
     
@@ -15,7 +16,8 @@ class BaseController {
      * 
      * @param string $id
      */
-    public function __construct(string $id) {
+    public function __construct(string $id)
+    {
         $this->id = $id;
         $this->view = new \core\views\View();
         $this->view->controllerId = $id;

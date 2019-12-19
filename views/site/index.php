@@ -6,7 +6,7 @@
      use core\views\View;
 ?>
 <h3>Fill the Form</h3>
-<?php View::renderForm($task, 'index', 'POST', ['userName', 'email', 'text']) ?>
+<?php View::renderForm($task, 'index', 'POST', ['userName', 'email', 'text', 'status']) ?>
 <p>Is Valid: <?=$isValid?></p>
 <?php if (!$isValid) : ?>
     <pre>

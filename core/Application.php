@@ -10,7 +10,8 @@ use core\Request;
  *
  * @author artyomnar
  */
-class Application {    
+class Application
+{
     private $request;
     private $response;
     

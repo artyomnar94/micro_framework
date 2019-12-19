@@ -7,7 +7,8 @@ namespace core\models;
  *
  * @author artyomnar
  */
-class BaseModel {
+class BaseModel
+{
     private $modelName;
     
     /**

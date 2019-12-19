@@ -7,7 +7,8 @@ namespace core\views;
  *
  * @author artyomnar
  */
-class View {
+class View
+{
     public $view;
     public $viewPath;
     public $layout;

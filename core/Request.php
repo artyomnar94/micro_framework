@@ -7,7 +7,8 @@ namespace core;
  *
  * @author artyomnar
  */
-class Request {
+class Request
+{
     private $controller;
     private $action;
     private $getParams = [];

@@ -7,7 +7,8 @@ namespace core;
  *
  * @author artyomnar
  */
-class Response {
+class Response
+{
     public $code;
 
     /**

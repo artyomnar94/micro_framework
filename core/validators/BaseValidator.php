@@ -7,7 +7,8 @@ namespace core\validators;
  *
  * @author artyomnar
  */
-abstract class BaseValidator {
+abstract class BaseValidator
+{
     public $attribte;
     public $isValid = true;
     

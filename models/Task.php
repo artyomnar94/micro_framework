@@ -9,7 +9,8 @@ use core\models\BaseModel;
  *
  * @author artyomnar
  */
-class Task extends BaseModel {
+class Task extends BaseModel
+{
     public $userName;
     public $email;
     public $text;
@@ -19,7 +20,8 @@ class Task extends BaseModel {
     {
         return [
             [['userName', 'email'], 'require'],
-            ['userName', 'string', ['min' => 3, 'max' => 5]]
+            ['userName', 'string', ['min' => 3, 'max' => 5]],
+            ['status', 'number', ['min' => 0, 'max' => 3]]
         ];
     }
     
