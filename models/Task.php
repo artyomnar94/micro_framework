@@ -25,6 +25,16 @@ class Task extends BaseModel
         ];
     }
     
+    public function getAttributeLabels(): array
+    {
+        return [
+            'userName' => 'User Name',            
+            'email' => 'Email',
+            'text' => 'Text',            
+            'status' => 'Status',
+        ];
+    }
+    
     public function getTaskInfo(): array
     {
         $taskInfo = [

@@ -47,6 +47,26 @@ class BaseModel
     }
     
     /**
+     * Returns attribute labels as array 'attr' => 'attr name' wish used in forms, errors
+     * @return array
+     */
+    public function getAttributeLabels(): array
+    {
+        return [];
+    }
+    
+    /**
+     * Returns label by provided model attribute or attribute name if value doesn't exists 
+     * @param string $attribute
+     * @return string
+     */
+    public function getAttributeLabel(string $attribute): string
+    {
+        $labelList = $this->getAttributeLabels();
+        return $labelList[$attribute]?? $attribute;
+    }
+
+        /**
      * Set model attribute values from provided container if used convention
      * 'modelName' => ['attributeName' => 'value']
      * @param array $container
@@ -86,7 +106,7 @@ class BaseModel
         
         return in_array(false, $validationResults)? false : true;
     }
-    
+      
     /**public function getAttributeList(array $attributes = []): array
     {
         $attrList = [];

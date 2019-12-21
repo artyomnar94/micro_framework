@@ -55,30 +55,16 @@ class View
     }
     
     /**
-     * Renders form to set model property
-     * 
-     * @param \core\BaseModel $model
-     * @param string $action
-     * @param string $method
-     * @param array $attributeList
+     * Returns unpacked html attributes as string
+     * @param array $params
+     * @return string
      */
-    public static function renderForm(
-            \core\models\BaseModel $model, 
-            string $action, 
-            string $method = 'POST', 
-            array $attributeList = []
-            )
+    public static function extractHtmlParams(array $params): string
     {
-        $modelName = $model->getModelName();
-        echo "<form method=\"$method\" action=\"$action\">";
-        //$attributeList = empty($attributeList)? $model-> //ToDo: realize getting all model attributes by default or provided
-        foreach ($attributeList as $item) {
-            echo "<label>$item</label>";
-            //echo "<input type=\"text\" name=\"$modelName'['$item']'\">";
-            echo "<input type=\"text\" name=\"$modelName";
-            echo "[$item]\">";
+        $paramstring = '';
+        foreach ($params as $key => $val) {
+            $paramstring .= " $key=\"$val\"";
         }
-        echo "<input type=\"submit\">";
-        echo "</form>";        
-    }
+        return $paramstring;
+    }   
 }
