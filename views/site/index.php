@@ -20,7 +20,7 @@
             $form->field('text')->password();
         echo "</div>";
         echo "<div>";
-            $form->field('statusa')->number();
+            $form->field('status')->number();
         echo "</div>";
 
         Field::submit();
