@@ -12,11 +12,13 @@ class Request
     private $controller;
     private $action;
     private $getParams = [];
-    
+    private $format;
+    private $headers = [];
+
     /**
      * Parses current request uri and sets contoller and action value
      */            
-    public function parseRequestUri()
+    public function parseRequestUri(): void
     {
         $uri = substr($_SERVER['REQUEST_URI'], 1);
         $queryString = $_SERVER['QUERY_STRING'];
@@ -28,6 +30,15 @@ class Request
         $this->action = $routeParams[1]? $routeParams[1] : 'index';
     }
     
+    /**
+     * Parses request headers to define response format
+     */
+    public function parseHeaders(): void
+    {
+        $this->headers = getallheaders();
+        $this->format = $this->headers['Content-Type']?? 'text/html';
+    }
+
     /**
      * Parses query string and returns get parameters as list
      * @return array
@@ -49,6 +60,10 @@ class Request
         return $this->getParams;
     }
     
+    /**
+     * Defines controller and returns reflection object
+     * @return \ReflectionClass
+     */
     public function getContoller(): \ReflectionClass
     {
         $contollerClassName = '\controllers\\' . ucfirst($this->controller) . 'Controller';
@@ -60,11 +75,16 @@ class Request
         return $contollerReflection;
     }
     
+    /**
+     * Executes action of reqested controller
+     * @param \ReflectionClass $contoller
+     * @return mixed
+     */
     public function callAction(\ReflectionClass $contoller)
     {
         $actionMethod = 'action' . ucfirst($this->action);
         try {
-            $contoller->getMethod($actionMethod)->invoke($contoller->newInstance($this->controller));
+            return $contoller->getMethod($actionMethod)->invoke($contoller->newInstance($this->controller, $this->format));
         } catch (\ReflectionException $exception) {          
             Response::getErrorPage(404, 'Page not found');//Unavailable to provide custom error view, cause calling function inside core dir
         }
@@ -97,5 +117,14 @@ class Request
     {
         header("location: $url");
         exit;
+    }
+    
+    /**
+     * Returns response format
+     * @return string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 }

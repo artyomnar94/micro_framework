@@ -26,9 +26,14 @@ class Application
     public function run()
     {        
         $this->request->parseRequestUri();
+        $this->request->parseHeaders();
         //$params = $this->request->parseGetParams();//I think this shit is useless        
         $controller = $this->request->getContoller();
-        $this->request->callAction($controller);        
+        $result = $this->request->callAction($controller);
+        if ($result) {
+            $this->response->send($result, $this->request->getFormat());
+            $this->response->setHeaders($this->request->getFormat());
+        }
     }
     
 }

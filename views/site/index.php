@@ -9,6 +9,7 @@
 <h3>Fill the Form</h3>
 <?php 
     //View::renderForm($task, 'index', 'POST', ['userName', 'email', 'text', 'status']) 
+    phpinfo();die;
     $form = new \core\views\Form($task, 'index', 'post', ['id' => 'MyForm']);
         echo "<div>";
             $form->field('userName')->textInput(['id' => 'UsN', 'style' => 'color:red;']);
