@@ -18,8 +18,7 @@ class SiteController extends BaseController
         $task = new Task();
         $task->load($_POST);
         $isValid = $task->validate();
-        return ['name' => 'Bob', 'age' => 123];
-        //$this->view->render('index', ['task' => $task, 'isValid' => $isValid]);
+        $this->view->render('index', ['task' => $task, 'isValid' => $isValid]);
     }
           
 }
