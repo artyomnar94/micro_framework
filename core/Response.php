@@ -47,10 +47,10 @@ class Response
             case 'text/html':
                 $this->sendTextHtml($data);
                 break;
-            case 'json':                
+            case 'application/json':                
                 $this->sendJson($data);
                 break;
-            case 'xml':                
+            case 'application/xml':                
                 $this->sendXml($data);
                 break;
             default :
@@ -78,55 +78,38 @@ class Response
     /**
      * @param mixed $data
      */
-    private function sendXml($data)
+    private function sendXml($data): void
     {
         //echo xmlrpc_encode($data);//There is an excetenstion, installing required: sudo apt-get install php7.2-xmlrpc
-        $this->xml_encode($data);
+        
+        $head = "<?xml version='1.0' encoding='UTF-8'?>";
+        $body = '';
+        $this->getXmlBody($data, $body);
+        echo $head . $body;
     }
     
-    //From stack over flow
-    public function xml_encode($mixed, $domElement=null, $DOMDocument=null)
+    /**
+     * Parses provided array data and writes xml body into provided string
+     * 
+     * @param array $data
+     * @param string $body
+     * @param string $innerKey
+     * @return string
+     */
+    private function getXmlBody(array $data, string &$body, string $innerKey = ''): void
     {
-        if (is_null($DOMDocument)) {
-            $DOMDocument =new \DOMDocument;
-            $DOMDocument->formatOutput = true;
-            xml_encode($mixed, $DOMDocument, $DOMDocument);
-            echo $DOMDocument->saveXML();
+        if ($innerKey) {
+            $body .= "<$innerKey>";
         }
-        else {
-            // To cope with embedded objects 
-            if (is_object($mixed)) {
-              $mixed = get_object_vars($mixed);
-            }
-            if (is_array($mixed)) {
-                foreach ($mixed as $index => $mixedElement) {
-                    if (is_int($index)) {
-                        if ($index === 0) {
-                            $node = $domElement;
-                        }
-                        else {
-                            $node = $DOMDocument->createElement($domElement->tagName);
-                            $domElement->parentNode->appendChild($node);
-                        }
-                    }
-                    else {
-                        $plural = $DOMDocument->createElement($index);
-                        $domElement->appendChild($plural);
-                        $node = $plural;
-                        if (!(rtrim($index, 's') === $index)) {
-                            $singular = $DOMDocument->createElement(rtrim($index, 's'));
-                            $plural->appendChild($singular);
-                            $node = $singular;
-                        }
-                    }
-
-                    xml_encode($mixedElement, $node, $DOMDocument);
-                }
-            }
-            else {
-                $mixed = is_bool($mixed) ? ($mixed ? 'true' : 'false') : $mixed;
-                $domElement->appendChild($DOMDocument->createTextNode($mixed));
+        foreach ($data as $key => $val) {
+            if (is_array($val)) {
+                $this->getXmlBody($val, $body, $key);
+            } else {
+                $body .= "<$key>$val</$key>";                
             }
         }
-    }
+        if ($innerKey) {
+            $body .= "</$innerKey>";
+        }
+    }           
 }

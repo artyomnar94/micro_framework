@@ -31,8 +31,8 @@ class Application
         $controller = $this->request->getContoller();
         $result = $this->request->callAction($controller);
         if ($result) {
-            $this->response->send($result, $this->request->getFormat());
             $this->response->setHeaders($this->request->getFormat());
+            $this->response->send($result, $this->request->getFormat());
         }
     }
     
