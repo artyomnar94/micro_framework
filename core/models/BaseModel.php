@@ -9,7 +9,7 @@ namespace core\models;
  */
 class BaseModel
 {
-    private $modelName;
+    protected $modelName;
     
     /**
      * Stores errors after attribute validation in format 'attr' => 'error msg'

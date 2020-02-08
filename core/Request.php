@@ -26,8 +26,8 @@ class Request
             $uri = str_replace('?', '', strstr($uri, $queryString, true));            
         }   
         $routeParams = explode('/', $uri);
-        $this->controller = $routeParams[0];
-        $this->action = $routeParams[1]? $routeParams[1] : 'index';
+        $this->controller = $routeParams[0]? $routeParams[0] : 'site';
+        $this->action = $routeParams[1]?? 'index';
     }
     
     /**
