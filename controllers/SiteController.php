@@ -18,8 +18,6 @@ class SiteController extends BaseController
         $task = new Task();
         $task->load($_POST);
         $isValid = $task->validate();
-        //$db = new \core\db\DB();
-        //$res = $db->row('SELECT * FROM users WHERE id = :id', ['id' => $_GET['id']]);
         $users = new \models\Users();
         //$res = $users->select(['name'])->findWhere(['id' => 3])->getAll();
         $res = $users->findOne(4);

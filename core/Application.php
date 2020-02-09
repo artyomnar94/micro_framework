@@ -2,8 +2,8 @@
 
 namespace core;
 
-use controllers\SiteController;
 use core\Request;
+use core\db\DB;
 
 /**
  * Base class for web app
@@ -14,10 +14,12 @@ class Application
 {
     private $request;
     private $response;
-    
+    public static $db;
+
     public function __construct() {
         $this->request = new Request();
         $this->response = new Response();
+        self::$db = new DB();
     }
     
     /**

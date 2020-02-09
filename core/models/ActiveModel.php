@@ -2,6 +2,8 @@
 
 namespace core\models;
 
+use core\Application;
+
 /**
  * class ActiveModel contain logic for working with DB using Table-entity
  *
@@ -10,7 +12,6 @@ namespace core\models;
 class ActiveModel extends BaseModel
 {
     protected $tableName;
-    private $db;
     private $queryString;
     private $selectPart = "";
     private $conditionPart = "";
@@ -19,7 +20,6 @@ class ActiveModel extends BaseModel
     public function __construct()
     {
         parent::__construct();
-        $this->db = new \core\db\DB();
         $this->tableName = $this->modelName;
     }
     
@@ -29,9 +29,8 @@ class ActiveModel extends BaseModel
      */
     public function getAll()
     {
-        $this->queryString = empty($this->selectPart)? "SELECT * FROM {$this->tableName}" : ($this->selectPart . " FROM {$this->tableName} " . $this->conditionPart);
-        //var_dump([$this->queryString, $this->conditionParams]);die;
-        $rows = $this->db->row($this->queryString, $this->conditionParams);        
+        $this->queryString = empty($this->selectPart)? "SELECT * FROM {$this->tableName}" : ($this->selectPart . " FROM {$this->tableName} " . $this->conditionPart);        
+        $rows = Application::$db->row($this->queryString, $this->conditionParams);        
         return $rows;
     }
     
@@ -87,13 +86,18 @@ class ActiveModel extends BaseModel
         return $result;
     }
     
+    /**
+     * Returns one item by provided attribute or null if it doesn't exists
+     * @param type $attribute
+     * @return mixed
+     */
     public function findOne($attribute)
     {
         if (!is_array($attribute)) {
             $condition = ['id' => $attribute];
         }
         $result = $this->findWhere($condition)->getAll();
-        return $result;        
+        return $result[0] ?? null;        
     }
     
 }
